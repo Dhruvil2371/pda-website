@@ -1,0 +1,16 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 56px;
+}
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; gap: 40px; }
+}
+.formCard {
+  background: var(--bg-soft);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+}
+@media (max-width: 560px) {
+  .formCard { padding: 20px; }
+}

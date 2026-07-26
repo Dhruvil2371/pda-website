@@ -1,0 +1,37 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Deploy: connect this repo in the Render dashboard, choose "Blueprint",
+# then set the SMTP env vars marked `sync: false` after the first deploy.
+services:
+  - type: web
+    name: pda-website
+    runtime: node
+    plan: free            # bump to `starter` (paid) if you want the SQLite audit log to persist
+    region: singapore     # closest Render region to India
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
+      - key: ADMIN_EMAIL
+        value: babusheth123@gmail.com
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_SECURE
+        value: "false"
+      - key: SMTP_USER
+        value: babusheth123@gmail.com
+      - key: SMTP_PASS
+        sync: false       # set in Render dashboard — Gmail App Password
+      - key: SMTP_FROM
+        value: "Purvang Doshi Website <babusheth123@gmail.com>"
+    # For the SQLite audit log to persist across deploys, uncomment on a paid plan:
+    # disk:
+    #   name: pda-data
+    #   mountPath: /opt/render/project/src/data
+    #   sizeGB: 1

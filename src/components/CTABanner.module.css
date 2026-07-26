@@ -1,0 +1,27 @@
+.wrap {
+  background: var(--teal);
+  padding: 56px var(--page-pad-x);
+  text-align: center;
+}
+.inner { max-width: 1440px; margin: 0 auto; }
+.title {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 20px;
+}
+.btn {
+  display: inline-block;
+  background: #fff;
+  color: var(--teal);
+  padding: 15px 32px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 14.5px;
+  transition: transform 0.15s ease;
+}
+.btn:hover { color: var(--teal-dark); transform: translateY(-1px); }
+@media (max-width: 780px) {
+  .title { font-size: 20px; }
+}
