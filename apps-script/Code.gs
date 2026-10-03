@@ -33,15 +33,33 @@ function doPost(e) {
 
     // Append to the sheet.
     const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const tz = ss.getSpreadsheetTimeZone() || Session.getScriptTimeZone() || 'Asia/Kolkata';
     let sheet = ss.getSheetByName(SHEET_NAME);
     if (!sheet) {
       sheet = ss.insertSheet(SHEET_NAME);
-      sheet.appendRow(['Timestamp', 'Name', 'Phone', 'Email', 'Service', 'Message', 'User Agent']);
+      sheet.appendRow(['Sr No', 'Date', 'Timestamp', 'Name', 'Phone', 'Email', 'Service', 'Message', 'User Agent']);
       sheet.setFrozenRows(1);
-      sheet.getRange('A1:G1').setFontWeight('bold');
+      sheet.getRange('A1:I1').setFontWeight('bold');
+      sheet.setColumnWidths(1, 1, 60);     // Sr No
+      sheet.setColumnWidths(2, 1, 110);    // Date
+      sheet.setColumnWidths(3, 1, 170);    // Timestamp
+      sheet.setColumnWidths(4, 1, 160);    // Name
+      sheet.setColumnWidths(5, 1, 140);    // Phone
+      sheet.setColumnWidths(6, 1, 200);    // Email
+      sheet.setColumnWidths(7, 1, 160);    // Service
+      sheet.setColumnWidths(8, 1, 360);    // Message
     }
+
+    // Sr No = count of data rows currently + 1 (header is row 1, data starts at row 2).
+    const srNo  = sheet.getLastRow();                                   // header is row 1 → first append = 1
+    const now   = new Date();
+    const dateStr = Utilities.formatDate(now, tz, 'dd-MMM-yyyy');       // e.g. 03-Oct-2026
+    const timeStr = Utilities.formatDate(now, tz, 'dd-MMM-yyyy HH:mm:ss'); // e.g. 03-Oct-2026 14:35:02
+
     sheet.appendRow([
-      new Date(),
+      srNo,
+      dateStr,
+      timeStr,
       name,
       phone,
       email,

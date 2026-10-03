@@ -21,12 +21,18 @@
   .grid { grid-template-columns: 1fr; }
 }
 
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
 .brand {
   font-family: var(--font-heading);
   font-size: 18px;
   color: #fff;
-  margin-bottom: 14px;
   font-weight: 700;
+  line-height: 1.2;
 }
 .blurb {
   font-size: 13.5px;

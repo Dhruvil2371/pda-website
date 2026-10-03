@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
+import { LogoMark } from "./Logo";
 import styles from "./Footer.module.css";
 
 export function Footer() {
@@ -8,7 +9,10 @@ export function Footer() {
       <div className={styles.inner}>
         <div className={styles.grid}>
           <div>
-            <div className={styles.brand}>{site.name}</div>
+            <div className={styles.brandRow}>
+              <LogoMark size={38} />
+              <div className={styles.brand}>{site.name}</div>
+            </div>
             <p className={styles.blurb}>
               Chartered Accountants based in Mahesana, providing taxation, audit, corporate and advisory services to individuals, SMEs, corporates, NRIs and foreign entities.
             </p>

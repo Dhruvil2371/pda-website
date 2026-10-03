@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { nav, site } from "@/lib/site";
 import { Icon } from "./Icon";
+import { LogoMark } from "./Logo";
 import styles from "./Header.module.css";
 
 export function Header() {
@@ -15,7 +16,10 @@ export function Header() {
     <header className={styles.wrap}>
       <div className={styles.inner}>
         <Link href="/" className={styles.brand} aria-label={site.name}>
-          Purvang Doshi <span>&amp; Associates</span>
+          <LogoMark size={34} />
+          <span className={styles.brandText}>
+            Purvang Doshi <span>&amp; Associates</span>
+          </span>
         </Link>
 
         <nav className={styles.desktopNav} aria-label="Primary">
