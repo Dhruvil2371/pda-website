@@ -5,7 +5,7 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.purvangdoshi.com",
   description:
     "Purvang Doshi & Associates is a Mahesana-based Chartered Accountants firm delivering taxation, audit, corporate, valuation and cross-border advisory services to individuals, SMEs, corporates, NRIs and foreign entities.",
-  email: "babusheth123@gmail.com",
+  email: "purvangdoshica@gmail.com",
   phone: "+91 63544 90042",
   phoneRaw: "+916354490042",
   whatsapp: "916354490042",

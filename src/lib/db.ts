@@ -87,3 +87,30 @@ export function markEmail(id: number | null, ok: boolean, error?: string) {
     // ignore — email delivery is what matters
   }
 }
+
+export type EnquiryRow = {
+  id: number;
+  created_at: string;
+  name: string;
+  phone: string;
+  email: string;
+  service: string | null;
+  message: string | null;
+  email_sent: number;
+  email_error: string | null;
+};
+
+export function listEnquiries(limit = 100): EnquiryRow[] {
+  const db = tryOpen();
+  if (!db) return [];
+  try {
+    return db
+      .prepare(
+        `SELECT id, created_at, name, phone, email, service, message, email_sent, email_error
+         FROM enquiries ORDER BY id DESC LIMIT ?`
+      )
+      .all(limit) as EnquiryRow[];
+  } catch {
+    return [];
+  }
+}

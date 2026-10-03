@@ -67,14 +67,28 @@ export async function POST(req: NextRequest) {
     ip,
   });
 
+  // Structured log so every enquiry is visible in `Render → Logs` even if email fails.
+  console.log(
+    `[ENQUIRY] ${new Date().toISOString()} id=${id ?? "n/a"} ${JSON.stringify({ name, phone, email, service, message })}`
+  );
+
   // Fire-and-forget email (don't block user response on SMTP).
   // id may be null on serverless (no persistent disk) — email is still the source of truth.
   sendEnquiryEmail({ id: id ?? 0, name, phone, email, service, message })
     .then((res) => {
-      if (res.ok) markEmail(id, true);
-      else markEmail(id, false, res.error);
+      if (res.ok) {
+        console.log(`[ENQUIRY] id=${id ?? "n/a"} email=sent`);
+        markEmail(id, true);
+      } else {
+        console.error(`[ENQUIRY] id=${id ?? "n/a"} email=FAILED error=${res.error}`);
+        markEmail(id, false, res.error);
+      }
     })
-    .catch((err) => markEmail(id, false, err instanceof Error ? err.message : "unknown"));
+    .catch((err) => {
+      const msg = err instanceof Error ? err.message : "unknown";
+      console.error(`[ENQUIRY] id=${id ?? "n/a"} email=THREW error=${msg}`);
+      markEmail(id, false, msg);
+    });
 
   return NextResponse.json({ ok: true, id });
 }
