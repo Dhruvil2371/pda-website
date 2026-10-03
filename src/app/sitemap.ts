@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
 
+export const dynamic = "force-static";
+
 const routes = [
   { path: "/", priority: 1.0 },
   { path: "/services", priority: 0.9 },
