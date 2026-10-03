@@ -15,17 +15,33 @@ export function EnquiryForm({ compact = false }: { compact?: boolean }) {
     setStatus("sending");
     setError(null);
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
-    // Honeypot
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+    // Honeypot — silently succeed for bots
     if (data.website) { setStatus("sent"); return; }
+
+    const sheetsUrl = process.env.NEXT_PUBLIC_SHEETS_URL;
+
     try {
-      const res = await fetch("/api/enquiry", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
-      if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong");
+      if (sheetsUrl) {
+        // Static-friendly path: POST to Google Apps Script. Must use text/plain + no-cors
+        // because script.google.com does not return CORS headers. The response is opaque,
+        // so we rely on the fetch not throwing; Apps Script also emails the admin as backup.
+        await fetch(sheetsUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(data),
+        });
+      } else {
+        // Server path: POST to our own /api/enquiry route
+        const res = await fetch("/api/enquiry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+        if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong");
+      }
       form.reset();
       setStatus("sent");
     } catch (err) {
